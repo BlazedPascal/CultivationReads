@@ -75,7 +75,7 @@ export default function AdminDashboard() {
 
       <section className="admin-section">
         <h2>Top Novels (7-day views)</h2>
-        <table className="admin-table">
+        <div className="admin-table-wrap"><table className="admin-table">
           <thead><tr><th>Title</th><th>Views (7d)</th><th>All-time</th><th>Chapters</th></tr></thead>
           <tbody>
             {topNovels.map((n) => (
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </section>
     </div>
   );

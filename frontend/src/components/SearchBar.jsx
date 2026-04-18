@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../utils/api.js';
 
-export default function SearchBar() {
+export default function SearchBar({ autoFocus = false }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [open, setOpen] = useState(false);
@@ -59,6 +59,7 @@ export default function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => results.length && setOpen(true)}
+          autoFocus={autoFocus}
         />
         <button type="submit" className="search-btn" aria-label="Search">⌕</button>
       </form>
