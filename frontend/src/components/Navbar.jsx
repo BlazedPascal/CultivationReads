@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar.jsx';
 
@@ -13,6 +13,8 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const searchRef = useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -23,6 +25,16 @@ export default function Navbar() {
     const handler = () => setBookmarkCount(getBookmarkCount());
     window.addEventListener('cr_bookmarks_changed', handler);
     return () => window.removeEventListener('cr_bookmarks_changed', handler);
+  }, []);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) setSearchOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
 
   return (
@@ -46,29 +58,40 @@ export default function Navbar() {
         </div>
 
         <div className="navbar-mobile-actions">
-          <button className="mobile-icon-btn" onClick={() => setSearchOpen((o) => !o)} aria-label="Search">
-            ⌕
-          </button>
-          <button className="mobile-icon-btn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
-            {menuOpen ? '✕' : '☰'}
-          </button>
+          <div className="mobile-action-wrap" ref={searchRef}>
+            <button
+              className={`mobile-icon-btn${searchOpen ? ' active' : ''}`}
+              onClick={() => { setSearchOpen((o) => !o); setMenuOpen(false); }}
+              aria-label="Search"
+            >
+              ⌕
+            </button>
+            {searchOpen && (
+              <div className="mobile-dropdown mobile-search-dropdown">
+                <SearchBar autoFocus />
+              </div>
+            )}
+          </div>
+
+          <div className="mobile-action-wrap" ref={menuRef}>
+            <button
+              className={`mobile-icon-btn${menuOpen ? ' active' : ''}`}
+              onClick={() => { setMenuOpen((o) => !o); setSearchOpen(false); }}
+              aria-label="Menu"
+            >
+              {menuOpen ? '✕' : '☰'}
+            </button>
+            {menuOpen && (
+              <div className="mobile-dropdown mobile-menu-dropdown">
+                <Link to="/novels" className="mobile-menu-link">Browse</Link>
+                <Link to="/novels" className="mobile-menu-link">
+                  Bookmarks {bookmarkCount > 0 && <span className="bookmark-badge">{bookmarkCount}</span>}
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {searchOpen && (
-        <div className="navbar-mobile-search">
-          <SearchBar autoFocus />
-        </div>
-      )}
-
-      {menuOpen && (
-        <div className="navbar-mobile-menu">
-          <Link to="/novels" className="mobile-menu-link">Browse</Link>
-          <Link to="/novels" className="mobile-menu-link">
-            Bookmarks {bookmarkCount > 0 && <span className="bookmark-badge">{bookmarkCount}</span>}
-          </Link>
-        </div>
-      )}
     </nav>
   );
 }

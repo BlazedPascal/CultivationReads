@@ -609,19 +609,8 @@ textarea { resize: vertical; }
 .admin-table tr:hover td { background: var(--bg-3); }
 
 /* ── Mobile actions (hidden on desktop) ────────────────────────────────────── */
-.navbar-mobile-actions { display: none; }
-.navbar-mobile-search {
-  display: none;
-  padding: .75rem 1rem;
-  border-top: 1px solid var(--border);
-  background: var(--bg-2);
-}
-.navbar-mobile-menu {
-  display: none;
-  flex-direction: column;
-  border-top: 1px solid var(--border);
-  background: var(--bg-2);
-}
+.navbar-mobile-actions { display: none; align-items: center; gap: .25rem; margin-left: auto; }
+.mobile-action-wrap { position: relative; }
 .mobile-icon-btn {
   background: none;
   border: none;
@@ -632,20 +621,40 @@ textarea { resize: vertical; }
   transition: color .2s;
   line-height: 1;
 }
-.mobile-icon-btn:hover { color: var(--accent); }
+.mobile-icon-btn:hover, .mobile-icon-btn.active { color: var(--accent); }
+.mobile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  z-index: 9999;
+}
+.mobile-search-dropdown {
+  width: 280px;
+  padding: .75rem;
+}
+.mobile-menu-dropdown {
+  min-width: 180px;
+  overflow: hidden;
+}
 .mobile-menu-link {
   display: flex;
   align-items: center;
   gap: .5rem;
-  padding: 1rem 1.5rem;
+  padding: .85rem 1.25rem;
   color: var(--text-2) !important;
   font-family: var(--font-heading);
-  font-size: .9rem;
+  font-size: .85rem;
   letter-spacing: .06em;
   text-transform: uppercase;
   border-bottom: 1px solid var(--border);
   transition: background .15s;
+  white-space: nowrap;
 }
+.mobile-menu-link:last-child { border-bottom: none; }
 .mobile-menu-link:hover { background: var(--bg-3); color: var(--text) !important; }
 
 /* ── Tablet (≤1024px) ──────────────────────────────────────────────────────── */
@@ -659,9 +668,7 @@ textarea { resize: vertical; }
   /* Navbar — hide desktop search/links, show icon buttons */
   .navbar-center { display: none; }
   .navbar-links { display: none; }
-  .navbar-mobile-actions { display: flex; align-items: center; gap: .25rem; margin-left: auto; }
-  .navbar-mobile-search { display: block; }
-  .navbar-mobile-menu { display: flex; }
+  .navbar-mobile-actions { display: flex; }
 
   /* Hero */
   .hero { padding: 3rem 1.25rem; }
