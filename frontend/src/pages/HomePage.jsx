@@ -57,7 +57,7 @@ export default function HomePage() {
 
           {trending.length === 0 && recent.length === 0 && (
             <div className="empty-state">
-              <p>No novels yet. Add your first novel via the <Link to="/admin">Admin panel</Link>.</p>
+              <p>No novels yet. Check back soon.</p>
             </div>
           )}
         </>
