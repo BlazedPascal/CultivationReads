@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/novels" element={<BrowsePage />} />
         <Route path="/novels/:slug" element={<NovelPage />} />
         <Route path="/novels/:slug/:chapterSlug" element={<ChapterPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin-cr9x" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   );

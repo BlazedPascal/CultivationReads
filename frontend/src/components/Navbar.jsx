@@ -36,7 +36,7 @@ export default function Navbar() {
             Bookmarks
             {bookmarkCount > 0 && <span className="bookmark-badge">{bookmarkCount}</span>}
           </Link>
-          <Link to="/admin" className="nav-link nav-link-admin">Admin</Link>
+
         </div>
       </div>
     </nav>
