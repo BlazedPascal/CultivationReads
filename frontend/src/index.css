@@ -347,13 +347,12 @@ textarea { resize: vertical; }
 .hero-inner { position: relative; max-width: 700px; margin: 0 auto; }
 .hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.6rem, 7vw, 4.5rem);
+  font-size: clamp(1.6rem, 4vw, 3rem);
   font-weight: 700;
   color: var(--accent);
-  letter-spacing: .06em;
+  letter-spacing: .04em;
   margin-bottom: .75rem;
   text-shadow: 0 0 40px rgba(201,150,58,.3);
-  word-break: break-word;
 }
 .hero-subtitle {
   color: var(--text-2);
