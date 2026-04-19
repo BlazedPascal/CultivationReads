@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar.jsx';
+import { useTheme } from '../hooks/useTheme.js';
 
 function getBookmarkCount() {
   try {
@@ -15,6 +16,7 @@ export default function Navbar() {
   const location = useLocation();
   const searchRef = useRef(null);
   const menuRef = useRef(null);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     setMenuOpen(false);
@@ -27,7 +29,6 @@ export default function Navbar() {
     return () => window.removeEventListener('cr_bookmarks_changed', handler);
   }, []);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handler = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) setSearchOpen(false);
@@ -55,17 +56,22 @@ export default function Navbar() {
             Bookmarks
             {bookmarkCount > 0 && <span className="bookmark-badge">{bookmarkCount}</span>}
           </Link>
+          <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
         </div>
 
         <div className="navbar-mobile-actions">
+          <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
+
           <div className="mobile-action-wrap" ref={searchRef}>
             <button
               className={`mobile-icon-btn${searchOpen ? ' active' : ''}`}
               onClick={() => { setSearchOpen((o) => !o); setMenuOpen(false); }}
               aria-label="Search"
-            >
-              ⌕
-            </button>
+            >⌕</button>
             {searchOpen && (
               <div className="mobile-dropdown mobile-search-dropdown">
                 <SearchBar autoFocus />
@@ -78,9 +84,7 @@ export default function Navbar() {
               className={`mobile-icon-btn${menuOpen ? ' active' : ''}`}
               onClick={() => { setMenuOpen((o) => !o); setSearchOpen(false); }}
               aria-label="Menu"
-            >
-              {menuOpen ? '✕' : '☰'}
-            </button>
+            >{menuOpen ? '✕' : '☰'}</button>
             {menuOpen && (
               <div className="mobile-dropdown mobile-menu-dropdown">
                 <Link to="/novels" className="mobile-menu-link">Browse</Link>
