@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../utils/api.js';
 
@@ -7,32 +6,9 @@ export default function SearchBar({ autoFocus = false }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [open, setOpen] = useState(false);
-  const [dropdownStyle, setDropdownStyle] = useState({});
   const timerRef = useRef(null);
   const wrapRef = useRef(null);
   const navigate = useNavigate();
-
-  // Recalculate dropdown position whenever it opens or window resizes
-  useEffect(() => {
-    if (!open || !wrapRef.current) return;
-    const update = () => {
-      const rect = wrapRef.current.getBoundingClientRect();
-      setDropdownStyle({
-        position: 'fixed',
-        top: rect.bottom + 6,
-        left: rect.left,
-        width: rect.width,
-        zIndex: 9999,
-      });
-    };
-    update();
-    window.addEventListener('resize', update);
-    window.addEventListener('scroll', update, true);
-    return () => {
-      window.removeEventListener('resize', update);
-      window.removeEventListener('scroll', update, true);
-    };
-  }, [open]);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -57,12 +33,7 @@ export default function SearchBar({ autoFocus = false }) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const handleSelect = (slug) => {
-    setOpen(false);
-    setQuery('');
-    navigate(`/novels/${slug}`);
-  };
-
+  const handleSelect = (slug) => { setOpen(false); setQuery(''); navigate(`/novels/${slug}`); };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (query.trim()) navigate(`/novels?q=${encodeURIComponent(query.trim())}`);
@@ -84,8 +55,8 @@ export default function SearchBar({ autoFocus = false }) {
         <button type="submit" className="search-btn" aria-label="Search">⌕</button>
       </form>
 
-      {open && results.length > 0 && createPortal(
-        <ul className="search-dropdown" style={dropdownStyle}>
+      {open && results.length > 0 && (
+        <ul className="search-dropdown">
           {results.map((n) => (
             <li key={n.id} className="search-dropdown-item" onMouseDown={() => handleSelect(n.slug)}>
               {n.cover_url && <img src={n.cover_url} alt="" className="search-cover" />}
@@ -95,8 +66,7 @@ export default function SearchBar({ autoFocus = false }) {
               </div>
             </li>
           ))}
-        </ul>,
-        document.body
+        </ul>
       )}
     </div>
   );
