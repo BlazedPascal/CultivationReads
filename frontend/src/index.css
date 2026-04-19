@@ -666,8 +666,8 @@ textarea { resize: vertical; }
   background: none;
   border: none;
   color: var(--text-2);
-  font-size: 1.3rem;
-  padding: .4rem .5rem;
+  font-size: 1.7rem;
+  padding: .4rem .6rem;
   border-radius: var(--radius);
   transition: color .2s;
   line-height: 1;
