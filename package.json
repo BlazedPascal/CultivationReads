@@ -1,0 +1,11 @@
+{
+  "name": "cultivationreads",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd frontend && npm ci && npm run build && cd ../backend && npm ci --omit=dev",
+    "start": "node backend/src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
