@@ -64,7 +64,11 @@ textarea { resize: vertical; }
   animation: spin .7s linear infinite;
   margin: 4rem auto;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin       { to { transform: rotate(360deg); } }
+@keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp   { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scaleIn    { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
 
 .empty-state {
   text-align: center;
@@ -87,7 +91,8 @@ textarea { resize: vertical; }
   letter-spacing: .05em;
   transition: background .2s;
 }
-.btn-primary:hover { background: var(--crimson-2); color: var(--text) !important; }
+.btn-primary:hover  { background: var(--crimson-2); color: var(--text) !important; }
+.btn-primary:active { transform: scale(.97); }
 
 .btn-secondary {
   display: inline-block;
@@ -101,6 +106,7 @@ textarea { resize: vertical; }
   letter-spacing: .05em;
   transition: all .2s;
 }
+.btn-secondary:active { transform: scale(.97); }
 .btn-secondary:hover, .btn-secondary.bookmarked {
   background: var(--accent);
   color: var(--bg) !important;
@@ -232,6 +238,7 @@ textarea { resize: vertical; }
   top: calc(100% + 4px);
   left: 0;
   right: 0;
+  animation: fadeInDown .18s ease both;
   background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -284,6 +291,16 @@ textarea { resize: vertical; }
 }
 
 /* ── Novel card ────────────────────────────────────────────────────────────── */
+.novel-grid .novel-card {
+  animation: fadeInUp .4s ease both;
+}
+.novel-grid .novel-card:nth-child(2)  { animation-delay: .05s; }
+.novel-grid .novel-card:nth-child(3)  { animation-delay: .1s; }
+.novel-grid .novel-card:nth-child(4)  { animation-delay: .15s; }
+.novel-grid .novel-card:nth-child(5)  { animation-delay: .2s; }
+.novel-grid .novel-card:nth-child(6)  { animation-delay: .25s; }
+.novel-grid .novel-card:nth-child(n+7){ animation-delay: .3s; }
+
 .novel-card {
   display: flex;
   flex-direction: column;
@@ -335,6 +352,11 @@ textarea { resize: vertical; }
   color: var(--text-3);
 }
 
+/* ── Page entrance ─────────────────────────────────────────────────────────── */
+.home-page, .browse-page, .novel-page, .chapter-reader, .admin-page {
+  animation: fadeIn .3s ease both;
+}
+
 /* ── Home page ─────────────────────────────────────────────────────────────── */
 .home-page { padding-bottom: 4rem; }
 .hero {
@@ -352,6 +374,9 @@ textarea { resize: vertical; }
   pointer-events: none;
 }
 .hero-inner { position: relative; max-width: 700px; margin: 0 auto; }
+.hero-title  { animation: fadeInUp .6s ease both; }
+.hero-subtitle { animation: fadeInUp .6s .12s ease both; }
+.hero-cta    { animation: fadeInUp .6s .22s ease both; }
 .hero-title {
   font-family: var(--font-heading);
   font-size: clamp(1.6rem, 4vw, 3rem);
@@ -416,6 +441,7 @@ textarea { resize: vertical; }
   top: calc(100% + 4px);
   left: 0;
   min-width: 100%;
+  animation: fadeInDown .18s ease both;
   background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -455,7 +481,7 @@ textarea { resize: vertical; }
 
 /* ── Novel detail page ─────────────────────────────────────────────────────── */
 .novel-page { max-width: 1100px; margin: 2.5rem auto; padding: 0 1.5rem 4rem; }
-.novel-header { display: flex; gap: 2.5rem; margin-bottom: 3rem; }
+.novel-header { display: flex; gap: 2.5rem; margin-bottom: 3rem; animation: fadeInUp .4s ease both; }
 .novel-cover-wrap { flex-shrink: 0; }
 .novel-cover {
   width: 200px;
@@ -482,7 +508,7 @@ textarea { resize: vertical; }
 .novel-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
 
 /* ── Chapter list ──────────────────────────────────────────────────────────── */
-.chapter-list { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+.chapter-list { border-top: 1px solid var(--border); padding-top: 1.5rem; animation: fadeIn .3s ease both; }
 .chapter-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; }
 .chapter-list-title { font-family: var(--font-heading); font-size: 1.15rem; }
 .chapter-count { font-size: .9rem; color: var(--text-3); font-family: var(--font-serif); }
@@ -517,7 +543,8 @@ textarea { resize: vertical; }
   margin: 0 auto;
   padding: 2.5rem 1.5rem 6rem;
 }
-.reader-header { margin-bottom: 2.5rem; }
+.reader-header { margin-bottom: 2.5rem; animation: fadeInUp .35s ease both; }
+.reader-content { animation: fadeIn .5s .1s ease both; }
 .reader-breadcrumb {
   font-size: .8rem;
   color: var(--text-3);
@@ -677,6 +704,7 @@ textarea { resize: vertical; }
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
+  animation: fadeInDown .18s ease both;
   background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
