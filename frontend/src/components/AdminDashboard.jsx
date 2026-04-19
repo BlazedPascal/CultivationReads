@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../utils/api.js';
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ onLogout }) {
   const [overview, setOverview] = useState(null);
   const [topNovels, setTopNovels] = useState([]);
   const [form, setForm] = useState({ title: '', title_cn: '', author: '', description: '', genres: '', status: 'ongoing', total_chapters: '' });
@@ -33,7 +33,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
-      <h1 className="admin-title">Admin Dashboard</h1>
+      <div className="admin-header-row">
+        <h1 className="admin-title">Admin Dashboard</h1>
+        <button className="btn-secondary" onClick={onLogout}>Log out</button>
+      </div>
 
       {overview && (
         <div className="stats-grid">

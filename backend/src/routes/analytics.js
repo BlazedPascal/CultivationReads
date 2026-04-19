@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import pool from '../db/pool.js';
+import adminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
+router.use(adminAuth);
 
 // GET /api/analytics/overview — counts
 router.get('/overview', async (req, res, next) => {

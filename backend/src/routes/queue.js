@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import pool from '../db/pool.js';
+import adminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
+router.use(adminAuth);
 
 // POST /api/queue — add item(s) to translation queue
 router.post('/', async (req, res, next) => {

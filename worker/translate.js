@@ -4,14 +4,20 @@ const API_BASE = process.env.API_BASE || 'http://localhost:3001/api';
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434/api/generate';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:14b';
 const POLL_INTERVAL_MS = parseInt(process.env.POLL_INTERVAL_MS || '30000');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 
 const SYSTEM_PROMPT =
   'You are a professional Chinese to English light novel translator. ' +
   'Translate naturally and fluently, preserving cultivation terms, names, and the author\'s tone. ' +
   'Do not add commentary.';
 
+const authHeaders = {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${ADMIN_PASSWORD}`,
+};
+
 async function fetchNext() {
-  const res = await fetch(`${API_BASE}/queue/next`);
+  const res = await fetch(`${API_BASE}/queue/next`, { headers: authHeaders });
   if (!res.ok) throw new Error(`Queue fetch failed: ${res.status}`);
   const { item } = await res.json();
   return item;
@@ -36,7 +42,7 @@ async function translate(rawText) {
 async function postChapter(novelSlug, chapterNumber, contentEn, contentRaw) {
   const res = await fetch(`${API_BASE}/chapters/${novelSlug}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({
       chapter_number: chapterNumber,
       content_en: contentEn,
@@ -50,7 +56,7 @@ async function postChapter(novelSlug, chapterNumber, contentEn, contentRaw) {
 async function markQueue(id, status, errorMessage) {
   await fetch(`${API_BASE}/queue/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ status, error_message: errorMessage }),
   });
 }
@@ -88,7 +94,6 @@ async function runLoop() {
 
   while (true) {
     let didWork = true;
-    // Drain queue before sleeping
     while (didWork) {
       didWork = await processOne();
     }

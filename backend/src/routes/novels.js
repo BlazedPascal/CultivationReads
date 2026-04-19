@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import slugify from 'slugify';
 import pool from '../db/pool.js';
+import adminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
 
@@ -101,7 +102,7 @@ router.get('/:slug', async (req, res, next) => {
 });
 
 // POST /api/novels — create novel
-router.post('/', async (req, res, next) => {
+router.post('/', adminAuth, async (req, res, next) => {
   try {
     const { title, title_cn, author, cover_url, description, genres, status, total_chapters } = req.body;
     if (!title) return res.status(400).json({ error: 'title is required' });
@@ -122,7 +123,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // PATCH /api/novels/:id — update novel metadata
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', adminAuth, async (req, res, next) => {
   try {
     const allowed = ['title', 'title_cn', 'author', 'cover_url', 'description', 'genres', 'status', 'total_chapters'];
     const updates = Object.entries(req.body).filter(([k]) => allowed.includes(k));

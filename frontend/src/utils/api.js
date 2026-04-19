@@ -1,9 +1,15 @@
 const BASE = import.meta.env.VITE_API_URL || '/api';
 
+let adminToken = '';
+export function setAdminToken(t) { adminToken = t; }
+export function clearAdminToken() { adminToken = ''; }
+
 async function request(path, options = {}) {
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  if (adminToken) headers['Authorization'] = `Bearer ${adminToken}`;
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
     ...options,
+    headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
   if (!res.ok) {

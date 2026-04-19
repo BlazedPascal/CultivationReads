@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import slugify from 'slugify';
 import pool from '../db/pool.js';
+import adminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
 
@@ -89,7 +90,7 @@ router.get('/:novelSlug/:chapterSlug', async (req, res, next) => {
 });
 
 // POST /api/chapters/:novelSlug — upsert chapter from pipeline
-router.post('/:novelSlug', async (req, res, next) => {
+router.post('/:novelSlug', adminAuth, async (req, res, next) => {
   try {
     const { chapter_number, title, content_en, content_raw } = req.body;
     if (!chapter_number || !content_en) {
