@@ -1,14 +1,22 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { api } from '../utils/api.js';
 import NovelCard from '../components/NovelCard.jsx';
 import GenreFilter from '../components/GenreFilter.jsx';
+import Dropdown from '../components/Dropdown.jsx';
 
 const SORT_OPTIONS = [
   { value: 'updated', label: 'Recently Updated' },
-  { value: 'views', label: 'Most Viewed' },
-  { value: 'chapters', label: 'Most Chapters' },
-  { value: 'newest', label: 'Newest' },
+  { value: 'views',   label: 'Most Viewed' },
+  { value: 'chapters',label: 'Most Chapters' },
+  { value: 'newest',  label: 'Newest' },
+];
+
+const STATUS_OPTIONS = [
+  { value: '',          label: 'All Statuses' },
+  { value: 'ongoing',   label: 'Ongoing' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'hiatus',    label: 'Hiatus' },
 ];
 
 export default function BrowsePage() {
@@ -17,11 +25,11 @@ export default function BrowsePage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const genre = searchParams.get('genre') || '';
-  const sort = searchParams.get('sort') || 'updated';
+  const genre  = searchParams.get('genre') || '';
+  const sort   = searchParams.get('sort')   || 'updated';
   const status = searchParams.get('status') || '';
-  const page = parseInt(searchParams.get('page') || '1');
-  const LIMIT = 20;
+  const page   = parseInt(searchParams.get('page') || '1');
+  const LIMIT  = 20;
 
   const setParam = (key, value) => {
     const next = new URLSearchParams(searchParams);
@@ -33,7 +41,7 @@ export default function BrowsePage() {
   useEffect(() => {
     setLoading(true);
     const params = { sort, limit: LIMIT, page };
-    if (genre) params.genre = genre;
+    if (genre)  params.genre  = genre;
     if (status) params.status = status;
     api.getNovels(params)
       .then((d) => { setNovels(d.novels); setTotal(d.total); })
@@ -53,15 +61,8 @@ export default function BrowsePage() {
       <div className="browse-filters">
         <GenreFilter selected={genre} onChange={(g) => setParam('genre', g)} />
         <div className="browse-controls">
-          <select className="sort-select" value={sort} onChange={(e) => setParam('sort', e.target.value)}>
-            {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
-          <select className="sort-select" value={status} onChange={(e) => setParam('status', e.target.value)}>
-            <option value="">All Statuses</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
-            <option value="hiatus">Hiatus</option>
-          </select>
+          <Dropdown value={sort}   onChange={(v) => setParam('sort', v)}   options={SORT_OPTIONS} />
+          <Dropdown value={status} onChange={(v) => setParam('status', v)} options={STATUS_OPTIONS} />
         </div>
       </div>
 
